@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <title>API</title>
+</head>
+<body>
+    <h1>API</h1>
+
+    <h1>Din Vara</h1>
+
+    <form>
+        <div class="mb-3">
+
+    <label for="Ditt Namn" class="form-label">Skriv in dina uppgifter:</label>
+    <br>
+    <input type="text" name="Ditt Namn" id="NamnId" required placeholder="Namn...">
+    </div>
+    <input type="email" name="Email" id="EmailId" required placeholder="Email...">
+    <br><br>
+    <input type="link" id="AdressId" required placeholder="Din adress...">
+    <br><br>
+
+
+    <label>Fraktvillkor:</label>
+    <br>
+    <select name="Frakt" id="fraktId">
+        <option value="Hemleverans">Hemleverans</option>
+        <option value="Postombud">Postombud</option>
+        <option value="Postskåp">Postskåp</option>
+    </select>
+</label>
+
+<br><br>
+<button class="btn btn-info" id="CheckId">Beställ</button>
+</form>
+
+    <p id="Text"></p>
+ 
+    
+    
+
+
+    <script src="app.js"></script>
+</body>
+</html>
