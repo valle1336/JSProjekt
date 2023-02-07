@@ -17,15 +17,12 @@ fetch('https://fakestoreapi.com/products')
             //Funktioner 
 
             function getID(item) {
+                console.log("getID körs...");
                 console.log(item);
-                console.log("getID körs...")
                 getidEl.value = item;
                 getidEl.innerHTML = item;
             }
 
-            if(!getidEl) {
-                alert("Var vänlig välj en produkt!");
-            } 
 
             function createCustomer() {
                 let customerName = namnEl.value; // Här hämtar vi värderna från våra element i html.
@@ -34,7 +31,7 @@ fetch('https://fakestoreapi.com/products')
                 let customerFrakt = fraktEl.value;
                 let ItemID = getidEl.value; 
 
-                if (!customerName || !customerEmail || !customerAdress || !customerFrakt) {
+                if (!customerName || !customerEmail || !customerAdress || !customerFrakt || ItemID == "") {
                     console.log("Fyll i alla fält!")
                     return;
                 }
@@ -88,9 +85,11 @@ fetch('https://fakestoreapi.com/products')
                     <p> ${output[i].description} </p>
                     <p> Pris - ${output[i].price} </p>
                     <p> Produkt ID - ${output[i].id} </p>
+                    <a href="#">
                     <button type="button" class="btn btn-info" id="item" onclick="getID (${output[i].id})" > 
                     Lägg i varukorg
                     </button>
+                    </a>
                     
                     
                     
