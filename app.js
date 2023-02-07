@@ -7,6 +7,7 @@ const emailEl = document.getElementById("EmailId");
 const adressEl = document.getElementById("AdressId");
 const fraktEl = document.getElementById("fraktId");
 const checkEl = document.getElementById("CheckId"); 
+const getidEl = document.getElementById("getOrderID");
 
 //Fetch
 fetch('https://fakestoreapi.com/products')
@@ -15,11 +16,28 @@ fetch('https://fakestoreapi.com/products')
 
             //Funktioner 
 
+            function getID(item) {
+                console.log(item);
+                console.log("getID körs...")
+                getidEl.value = item;
+                getidEl.innerHTML = item;
+            }
+
+            if(!getidEl) {
+                alert("Var vänlig välj en produkt!");
+            } 
+
             function createCustomer() {
                 let customerName = namnEl.value; // Här hämtar vi värderna från våra element i html.
                 let customerEmail = emailEl.value; 
                 let customerAdress = adressEl.value;
                 let customerFrakt = fraktEl.value;
+                let ItemID = getidEl.value; 
+
+                if (!customerName || !customerEmail || !customerAdress || !customerFrakt) {
+                    console.log("Fyll i alla fält!")
+                    return;
+                }
 
                 console.log("Customer name added: " + customerName); // Här loggar vi värderna i konsolen och vi kan då se kundens namn, email, adress och fraktvillkor som dem matade in.
                 console.log("Customer email added: " + customerEmail);
@@ -42,7 +60,7 @@ fetch('https://fakestoreapi.com/products')
                             "stringValue" : customerFrakt
                     },
                     "OrderId" : {
-                        "integerValue" : 1
+                        "integerValue" : ItemID
                     }
                 }
             })
@@ -58,21 +76,22 @@ fetch('https://fakestoreapi.com/products')
             .then(res => res.json)
             .then(data => console.log(data));
         }
+    
 
             function Read(output) {
                 console.log(output)
 
                 for(let i = 0; i < output.length; i++) { //Här med hjälp av en forloop så loopar vi ut infon ur fakestore api. 
                     text.innerHTML += `<p> ${output[i].category} </p>
+                    <h2> ${output[i].title} </h2>
                     <img src = ${output[i].image} > 
                     <p> ${output[i].description} </p>
-                    <p> ${output[i].price} </p>
-                    <a href="shop.html">
-                    <button type="button" class="btn btn-info"> 
-                    Köp
+                    <p> Pris - ${output[i].price} </p>
+                    <p> Produkt ID - ${output[i].id} </p>
+                    <button type="button" class="btn btn-info" id="item" onclick="getID (${output[i].id})" > 
+                    Lägg i varukorg
                     </button>
-                    </a>
-                    <h2> ${output[i].title} </h2>
+                    
                     
                     
                     
@@ -80,6 +99,7 @@ fetch('https://fakestoreapi.com/products')
                     `
                 }
             }
+           
 
             //Eventlyssnare
-            
+            checkEl.addEventListener("click", createCustomer);

@@ -19,7 +19,7 @@ function printOrders(data) {
 
     for(let customer of customerOrders) {
         textEl.innerHTML += 
-        `<h1>Här ska id stå</h1>
+        `<h1>Produkt ID: ${customer.fields.OrderId.integerValue}</h1>
         <p> Namn: ${customer.fields.Name.stringValue} </p>
         <p> Email: ${customer.fields.Email.stringValue} </p>
         <p> Adress: ${customer.fields.Adress.stringValue} </p>
