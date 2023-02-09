@@ -7,6 +7,7 @@ const adressEl = document.getElementById("AdressId");
 const orderIdEl = document.getElementById("getOrderID");
 const fraktEl = document.getElementById("fraktId");
 const textEl = document.getElementById("TextId");
+const updateButton = document.getElementById("Update");
 
 //Fetch Order API
 fetch('https://firestore.googleapis.com/v1/projects/orders-4ee1e/databases/(default)/documents/Ordrar') //Fetchar vårat api med ordrar (firebase)
@@ -14,29 +15,95 @@ fetch('https://firestore.googleapis.com/v1/projects/orders-4ee1e/databases/(defa
 .then(data=>printOrders(data));
 
 
-
 //Funktioner
 function deleteCustomer(customerName) {
     console.log(customerName);
-    console.log("deleteCustomer körs...")
+    console.log("deleteCustomer körs...");
+
 
     fetch("https://firestore.googleapis.com/v1/" + customerName, {
-        method: 'DELETE'
+        method: 'DELETE',
         
-    })
-    setTimeout(location.reload(), 3000);
+    }) 
+    alert("Beställning bort tagen!");
+    setTimeout(location.reload(), 2000);
 }
 
-function updateData(update) {
+// function editData(data) {
+//     let namee = namnEl.value;
+//     let emaill = emailEl.value;
+//     let fraktt = fraktEl.value;
+//     let orderIDD = orderIdEl.value;
+//     let adresss = adressEl.value;
+//     console.log("editData körs...");
+//     console.log("Order ID " + data);
+
+
+
+//     const body = JSON.stringify(
+//         {
+//             "fields": {
+//                 "Email": {
+//                     "stringValue": emaill
+//                 },
+//                 "Name": {
+//                     "stringValue": namee
+//                 },
+//                 "Frakt": {
+//                     "stringValue": fraktt
+//                 },
+//                 "OrderId": {
+//                     "intergerValue": orderIDD
+//                 },
+//                 "Adress": {
+//                     "stringValue": adresss
+//                   }
+//              }
+//          })
+
+//     fetch("https://firestore.googleapis.com/v1/" + data, {
+//         method:'PATCH',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         }, 
+//         body: body
+//     })    
+//      .then(res => res.json())
+//      .then(update => updateData(update));
+// }
+
+function getData(update) {
     console.log(update);
-    orderIdEl.value = update;
-    namnEl.value = 
-    emailEl.value = 
-    adressEl.value =
-    fraktEl
+    fetch("https://firestore.googleapis.com/v1/" + update)
+    .then(res => res.json())
+    .then(data=>updateData(data))
 }
 
-updateData();
+function updateData(data) {
+    console.log("updateData körs...");
+    console.log(data);
+    orderIdEl.value = data.fields.OrderId.integerValue;
+    namnEl.value = data.fields.Name.stringValue;
+    emailEl.value = data.fields.Email.stringValue;
+    adressEl.value = data.fields.Adress.stringValue;
+    fraktEl.value = data.fields.Frakt.stringValue;
+}
+
+function clickUpdate(updateData) {
+    console.log("clickUpdate körs...");
+    console.log(updateData);
+
+
+    // orderIdEl.value = updateData.fields.OrderId.integerValue;
+    // namnEl.value = updateData.fields.Name.stringValue;
+    // emailEl.value = updateData.fields.Email.stringValue;
+    // adressEl.value = updateData.fields.Adress.stringValue;
+    // fraktEl.value = updateData.fields.Frakt.stringValue;
+
+    alert("Data uppdaterat!");
+
+    clearFormData();
+}
 
 function clearFormData() {
     namnEl.value = "";
@@ -45,21 +112,6 @@ function clearFormData() {
     orderIdEl.value = "";
     fraktEl.value = "";
     }
-
-
-function editData() {
-    var formData = getFormData();
-
-    fetch("https://firestore.googleapis.com/v1/projects/orders-4ee1e/databases/(default)/documents/Ordrar", {
-        method: "POST", 
-        headers: {
-            "Content-Type":"application/json"
-        },
-        body:JSON.stringify(formData)
-    }).then((res)=>res.json()).then((Response)=>{
-        clearFormData();
-    })
-}
 
 function printOrders(data) {
     console.log("printOrders körs..."); //Här printar vi att metoden körs.
@@ -74,7 +126,7 @@ function printOrders(data) {
         <p> Adress: ${customer.fields.Adress.stringValue} </p>
         <p> Frakt: ${customer.fields.Frakt.stringValue} </p>
         <button onclick="deleteCustomer('${customer.name}')">Ta bort order </button>
-        <button onclick="editDataCall('${customer.name}')" id="update">Ändra order </button>
+        <button onclick="getData('${customer.name}')" id="update">Ändra order </button>
 
 
 
@@ -84,4 +136,7 @@ function printOrders(data) {
         `
     }
 }
+
+//EVENTLYSSNARE 
+updateButton.addEventListener("click", clickUpdate);
 

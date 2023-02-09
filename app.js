@@ -36,43 +36,52 @@ fetch('https://fakestoreapi.com/products')
                     return;
                 }
 
-                console.log("Customer name added: " + customerName); // Här loggar vi värderna i konsolen och vi kan då se kundens namn, email, adress och fraktvillkor som dem matade in.
-                console.log("Customer email added: " + customerEmail);
-                console.log("Customer adress added: " + customerAdress);
-                console.log("Customer shipment solution added: " + customerFrakt);
+                if(!ItemID) {
+                    console.log("Du måste välja en produkt!");
+                    alert("Din order lades inte till eftersom du inte valt någon produkt!");
+                    return;
+                } else {
+                   
+                    console.log("Customer name added: " + customerName); // Här loggar vi värderna i konsolen och vi kan då se kundens namn, email, adress och fraktvillkor som dem matade in.
+                    console.log("Customer email added: " + customerEmail);
+                    console.log("Customer adress added: " + customerAdress);
+                    console.log("Customer shipment solution added: " + customerFrakt);
 
-                let body = JSON.stringify({
+                    let body = JSON.stringify({
 
-                    "fields": {
-                        "Email": {
-                            "stringValue" : customerEmail //Här lägger vi in det kunden matade in i våran databas.
+                        "fields": {
+                            "Email": {
+                                "stringValue" : customerEmail //Här lägger vi in det kunden matade in i våran databas.
+                            },
+                            "Name": {
+                                "stringValue": customerName
+                            },
+                            "Adress": {
+                                "stringValue": customerAdress
+                            },
+                            "Frakt" : {
+                                "stringValue" : customerFrakt
                         },
-                        "Name": {
-                            "stringValue": customerName
-                        },
-                        "Adress": {
-                            "stringValue": customerAdress
-                        },
-                        "Frakt" : {
-                            "stringValue" : customerFrakt
-                    },
-                    "OrderId" : {
-                        "integerValue" : ItemID
+                        "OrderId" : {
+                            "integerValue" : ItemID
+                        }
                     }
-                }
-            })
-        
+                })
+            
+    
+            fetch("https://firestore.googleapis.com/v1/projects/orders-4ee1e/databases/(default)/documents/Ordrar", {
+                method: `POST`, 
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: body
+                })
+                .then(res => res.json)
+                .then(data => console.log(data));
+                alert("Tack för din beställning! 😁");
+               }
+             }
 
-        fetch("https://firestore.googleapis.com/v1/projects/orders-4ee1e/databases/(default)/documents/Ordrar", {
-            method: `POST`, 
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: body
-            })
-            .then(res => res.json)
-            .then(data => console.log(data));
-        }
     
 
             function Read(output) {
@@ -83,7 +92,8 @@ fetch('https://fakestoreapi.com/products')
                     <h2> ${output[i].title} </h2>
                     <img src = ${output[i].image} > 
                     <p> ${output[i].description} </p>
-                    <p> Pris - ${output[i].price} </p>
+                    <p> Pris - ${output[i].price}$ </p>
+                    <p> Rating - ${output[i].rating.rate}/5⭐ - Recensioner - ${output[i].rating.count} </p>
                     <p> Produkt ID - ${output[i].id} </p>
                     <a href="#">
                     <button type="button" class="btn btn-info" id="item" onclick="getID (${output[i].id})" > 
