@@ -8,6 +8,7 @@ const orderIdEl = document.getElementById("getOrderID");
 const fraktEl = document.getElementById("fraktId");
 const textEl = document.getElementById("TextId");
 const updateButton = document.getElementById("Update");
+const hiddenEl = document.getElementById("hidden");
 
 //Fetch Order API
 fetch('https://firestore.googleapis.com/v1/projects/orders-4ee1e/databases/(default)/documents/Ordrar') //Fetchar vårat api med ordrar (firebase)
@@ -72,9 +73,9 @@ function deleteCustomer(customerName) {
 //      .then(update => updateData(update));
 // }
 
-function getData(update) {
-    console.log(update);
-    fetch("https://firestore.googleapis.com/v1/" + update)
+function getData(name) {
+    console.log(name);
+    fetch("https://firestore.googleapis.com/v1/" + name)
     .then(res => res.json())
     .then(data=>updateData(data))
 }
@@ -82,6 +83,7 @@ function getData(update) {
 function updateData(data) {
     console.log("updateData körs...");
     console.log(data);
+    hiddenEl.value = data.name;
     orderIdEl.value = data.fields.OrderId.integerValue;
     namnEl.value = data.fields.Name.stringValue;
     emailEl.value = data.fields.Email.stringValue;
@@ -92,26 +94,64 @@ function updateData(data) {
 function clickUpdate(updateData) {
     console.log("clickUpdate körs...");
     console.log(updateData);
+   
 
+    let name = hiddenEl.value;
+    let localEmail = emailEl.value;
+    let localOrder = orderIdEl.value;
+    let localNamn = namnEl.value;
+    let localAdress = adressEl.value;
+    let localFrakt = fraktEl.value;
 
-    // orderIdEl.value = updateData.fields.OrderId.integerValue;
-    // namnEl.value = updateData.fields.Name.stringValue;
-    // emailEl.value = updateData.fields.Email.stringValue;
-    // adressEl.value = updateData.fields.Adress.stringValue;
-    // fraktEl.value = updateData.fields.Frakt.stringValue;
+    console.log("Beställning ID: " + name);
+    console.log("Nya Email adressen: " + localEmail);
+    console.log("Nya Ordern: " + localOrder);
+    console.log("Nya namnet på ordern: " + localNamn);
+    console.log("Nya adressen på ordern: " + localAdress);
+    console.log("Nya fraktvillkoren: " + localFrakt);
+    
 
-    alert("Data uppdaterat!");
+            let body = JSON.stringify(
+        {
+            "fields": {
+                "Email": {
+                    "stringValue": localEmail
+                },
+                "Name": {
+                    "stringValue": localNamn
+                },
+                "Frakt": {
+                    "stringValue": localFrakt
+                },
+                "OrderId": {
+                    "integerValue": localOrder
+                },
+                "Adress": {
+                    "stringValue": localAdress
+                  }
+             }
+         })
 
-    clearFormData();
+         fetch("https://firestore.googleapis.com/v1/" + name, {
+            method: 'PATCH',
+            headers: {'Content-Type': 'application/json'},
+            body: body
+         }) .then(result=>result.json())
+            .then(dataa => console.log(dataa));
+            setTimeout(location.reload(), 2000);
+            alert("Din order har uppdaterats!");
+            
+            
+    // clearFormData();
 }
 
-function clearFormData() {
-    namnEl.value = "";
-    emailEl.value = "";
-    adressEl.value = "";
-    orderIdEl.value = "";
-    fraktEl.value = "";
-    }
+// function clearFormData() {
+//     namnEl.value = "";
+//     emailEl.value = "";
+//     adressEl.value = "";
+//     orderIdEl.value = "";
+//     fraktEl.value = "";
+//     }
 
 function printOrders(data) {
     console.log("printOrders körs..."); //Här printar vi att metoden körs.
@@ -126,7 +166,11 @@ function printOrders(data) {
         <p> Adress: ${customer.fields.Adress.stringValue} </p>
         <p> Frakt: ${customer.fields.Frakt.stringValue} </p>
         <button onclick="deleteCustomer('${customer.name}')">Ta bort order </button>
-        <button onclick="getData('${customer.name}')" id="update">Ändra order </button>
+        <a href="#">
+        <button onclick="getData('${customer.name}')" id="update">
+        Ändra order 
+        </button>
+        </a>
 
 
 

@@ -97,7 +97,7 @@ fetch('https://fakestoreapi.com/products')
                     <p> Produkt ID - ${output[i].id} </p>
                     <a href="#">
                     <button type="button" class="btn btn-info" id="item" onclick="getID (${output[i].id})" > 
-                    Lägg i varukorg
+                    Köp
                     </button>
                     </a>
                     
