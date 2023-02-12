@@ -88,13 +88,15 @@ fetch('https://fakestoreapi.com/products')
                 console.log(output)
 
                 for(let i = 0; i < output.length; i++) { //Här med hjälp av en forloop så loopar vi ut infon ur fakestore api. 
-                    text.innerHTML += `<p> ${output[i].category} </p>
-                    <h2> ${output[i].title} </h2>
-                    <img src = ${output[i].image} > 
-                    <p> ${output[i].description} </p>
-                    <p> Pris - ${output[i].price}$ </p>
-                    <p> Rating - ${output[i].rating.rate}/5⭐ - Recensioner - ${output[i].rating.count} </p>
-                    <p> Produkt ID - ${output[i].id} </p>
+                    text.innerHTML += `              <tr>
+                    <td>${output[i].category}</td>
+                    <td>${output[i].title}</td>
+                    <td>${output[i].price}$</td>
+                    <td>${output[i].description}</td>
+                    <td>${output[i].rating.rate}/5⭐ Recensioner-${output[i].rating.count}</td>
+                    <td>${output[i].id}</td>
+                    <td><img src="${output[i].image}"/></td>
+                  </tr>
                     <a href="#">
                     <button type="button" class="btn btn-info" id="item" onclick="getID (${output[i].id})" > 
                     Köp
